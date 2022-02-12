@@ -38,8 +38,6 @@
 		60F7D454208CC31400ABF5D2 /* InputSourceBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F7D453208CC31400ABF5D2 /* InputSourceBarItem.swift */; };
 		B0008E552080286C003AD4DD /* SupportHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0008E542080286C003AD4DD /* SupportHelpers.swift */; };
 		B002E642216C0E38002774BA /* CoreDisplay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B002E641216C0E38002774BA /* CoreDisplay.framework */; };
-		B00D181D2152F4A5000806F4 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B00D181C2152F4A5000806F4 /* Sparkle.framework */; };
-		B00D181F2152F521000806F4 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = B00D181C2152F4A5000806F4 /* Sparkle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B04B7BB72087398C00C835D0 /* BatteryBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B04B7BB62087398C00C835D0 /* BatteryBarItem.swift */; };
 		B05600D32083E9BB00EB218D /* CustomSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B05600D22083E9BB00EB218D /* CustomSlider.swift */; };
 		B059D622205E03F5006E6B86 /* TouchBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B059D621205E03F5006E6B86 /* TouchBarController.swift */; };
@@ -73,21 +71,12 @@
 		B0F8771A207AC1EA00D6E430 /* TouchBarSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = B0F87719207AC1EA00D6E430 /* TouchBarSupport.m */; };
 		BAF5AB5724317B4300B04904 /* BasicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF5AB5624317B4300B04904 /* BasicView.swift */; };
 		BAF5AB5924317CAF00B04904 /* SwipeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF5AB5824317CAF00B04904 /* SwipeItem.swift */; };
+		C4B0A622F167608F80215C92 /* ShellScriptHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B0A80E5631204ECA77E64A /* ShellScriptHelper.swift */; };
+		C4B0A6E2C348A731E7A164B1 /* ChineseStockHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B0AD8C591F0DE4AFC725E6 /* ChineseStockHelper.swift */; };
+		C4B0A90E8FA6441F8887479A /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B0A0E95E14439BFF0657C0 /* DispatchQueueHelper.swift */; };
+		C4B0AABDB9C6A840D837059B /* ChineseStockBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B0A8F03643D2BAAEB83264 /* ChineseStockBarItem.swift */; };
 		F29F6A2524BC7148004FF8E4 /* UpNextScrubberTouchBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29F6A2424BC7148004FF8E4 /* UpNextScrubberTouchBarItem.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		B00D181E2152F507000806F4 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 12;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				B00D181F2152F521000806F4 /* Sparkle.framework in CopyFiles */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		36300E85209FD16700B31C71 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = SOURCE_ROOT; };
@@ -168,6 +157,10 @@
 		B0F8771B207AC92700D6E430 /* TouchBarSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TouchBarSupport.h; sourceTree = "<group>"; };
 		BAF5AB5624317B4300B04904 /* BasicView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicView.swift; sourceTree = "<group>"; };
 		BAF5AB5824317CAF00B04904 /* SwipeItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeItem.swift; sourceTree = "<group>"; };
+		C4B0A0E95E14439BFF0657C0 /* DispatchQueueHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueueHelper.swift; sourceTree = "<group>"; };
+		C4B0A80E5631204ECA77E64A /* ShellScriptHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShellScriptHelper.swift; sourceTree = "<group>"; };
+		C4B0A8F03643D2BAAEB83264 /* ChineseStockBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChineseStockBarItem.swift; sourceTree = "<group>"; };
+		C4B0AD8C591F0DE4AFC725E6 /* ChineseStockHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChineseStockHelper.swift; sourceTree = "<group>"; };
 		F29F6A2424BC7148004FF8E4 /* UpNextScrubberTouchBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpNextScrubberTouchBarItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -180,7 +173,6 @@
 				B081732A2135F354005D4908 /* CoreBrightness.framework in Frameworks */,
 				B059D62D205F11E8006E6B86 /* DFRFoundation.framework in Frameworks */,
 				B09EB1E6207C0F8E00D5C1E0 /* MultitouchSupport.framework in Frameworks */,
-				B00D181D2152F4A5000806F4 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +248,9 @@
 				B05600D22083E9BB00EB218D /* CustomSlider.swift */,
 				36A778BD20A6C27100B38714 /* GeneralExtensions.swift */,
 				B0F3112420C9E35F0076BB88 /* SupportNSTouchBar.swift */,
+				C4B0A80E5631204ECA77E64A /* ShellScriptHelper.swift */,
+				C4B0A0E95E14439BFF0657C0 /* DispatchQueueHelper.swift */,
+				C4B0AD8C591F0DE4AFC725E6 /* ChineseStockHelper.swift */,
 			);
 			path = MTMR;
 			sourceTree = "<group>";
@@ -331,6 +326,7 @@
 				B08126F0217BE19000A98970 /* WidgetProtocol.swift */,
 				B0F54A792295AC7D00B4C509 /* DarkModeBarItem.swift */,
 				F29F6A2424BC7148004FF8E4 /* UpNextScrubberTouchBarItem.swift */,
+				C4B0A8F03643D2BAAEB83264 /* ChineseStockBarItem.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -345,7 +341,6 @@
 				B082B24B205C7D8000BC04DC /* Sources */,
 				B082B24C205C7D8000BC04DC /* Frameworks */,
 				B082B24D205C7D8000BC04DC /* Resources */,
-				B00D181E2152F507000806F4 /* CopyFiles */,
 				B0679BBF215AE085000FC6B4 /* ShellScript */,
 			);
 			buildRules = (
@@ -517,6 +512,10 @@
 				6027D1B92080E52A004FFDC7 /* BrightnessViewController.swift in Sources */,
 				368EDDE720812A1D00E10953 /* ScrollViewItem.swift in Sources */,
 				B04B7BB72087398C00C835D0 /* BatteryBarItem.swift in Sources */,
+				C4B0A622F167608F80215C92 /* ShellScriptHelper.swift in Sources */,
+				C4B0AABDB9C6A840D837059B /* ChineseStockBarItem.swift in Sources */,
+				C4B0A90E8FA6441F8887479A /* DispatchQueueHelper.swift in Sources */,
+				C4B0A6E2C348A731E7A164B1 /* ChineseStockHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -635,7 +634,7 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "Mac Developer";
+				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -680,10 +679,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "Developer ID Application";
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = D6D8BR2QNB;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SYSTEM_LIBRARY_DIR)/PrivateFrameworks",

@@ -3,7 +3,7 @@ import Foundation
 
 extension Data {
     func barItemDefinitions() -> [BarItemDefinition]? {
-           return try! JSONDecoder().decode([BarItemDefinition].self, from: utf8string!.stripComments().data(using: .utf8)!)
+        return try! JSONDecoder().decode([BarItemDefinition].self, from: utf8string!.stripComments().data(using: .utf8)!)
     }
 }
 
@@ -35,8 +35,10 @@ struct BarItemDefinition: Decodable {
         var additionalParameters = try GeneralParameters(from: decoder).parameters
 
         if let result = try? parametersDecoder(decoder),
-            case let (itemType, actions, action, longAction, parameters) = result {
-            parameters.forEach { additionalParameters[$0] = $1 }
+           case let (itemType, actions, action, longAction, parameters) = result {
+            parameters.forEach {
+                additionalParameters[$0] = $1
+            }
             self.init(type: itemType, actions: actions, action: action, legacyLongAction: longAction, additionalParameters: additionalParameters)
         } else {
             self.init(type: .staticButton(title: "unknown"), actions: [], action: .none, legacyLongAction: .none, additionalParameters: additionalParameters)
@@ -45,197 +47,207 @@ struct BarItemDefinition: Decodable {
 }
 
 typealias ParametersDecoder = (Decoder) throws -> (
-    item: ItemType,
-    actions: [Action],
-    legacyAction: LegacyActionType,
-    legacyLongAction: LegacyLongActionType,
-    parameters: [GeneralParameters.CodingKeys: GeneralParameter]
+        item: ItemType,
+        actions: [Action],
+        legacyAction: LegacyActionType,
+        legacyLongAction: LegacyLongActionType,
+        parameters: [GeneralParameters.CodingKeys: GeneralParameter]
 )
 
 class SupportedTypesHolder {
     private var supportedTypes: [String: ParametersDecoder] = [
-        "escape": { _ in (
-            item: .staticButton(title: "esc"),
-            actions: [
-                Action(trigger: .singleTap, value: .keyPress(keycode: 53))
-            ],
-            legacyAction: .none,
-            legacyLongAction: .none,
-            parameters: [.align: .align(.left)]
-        ) },
+        "escape": { _ in
+            (
+                    item: .staticButton(title: "esc"),
+                    actions: [
+                        Action(trigger: .singleTap, value: .keyPress(keycode: 53))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [.align: .align(.left)]
+            )
+        },
 
-        "delete": { _ in (
-            item: .staticButton(title: "del"),
-            actions: [
-                Action(trigger: .singleTap, value: .keyPress(keycode: 117))
-            ],
-            legacyAction: .none,
-            legacyLongAction: .none,
-            parameters: [:]
-        ) },
+        "delete": { _ in
+            (
+                    item: .staticButton(title: "del"),
+                    actions: [
+                        Action(trigger: .singleTap, value: .keyPress(keycode: 117))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [:]
+            )
+        },
 
         "brightnessUp": { _ in
             let imageParameter = GeneralParameter.image(source: #imageLiteral(resourceName: "brightnessUp"))
             return (
-                item: .staticButton(title: ""),
-                actions: [
-                    Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_BRIGHTNESS_UP))
-                ],
-                legacyAction: .none,
-                legacyLongAction: .none,
-                parameters: [.image: imageParameter]
+                    item: .staticButton(title: ""),
+                    actions: [
+                        Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_BRIGHTNESS_UP))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [.image: imageParameter]
             )
         },
 
         "brightnessDown": { _ in
             let imageParameter = GeneralParameter.image(source: #imageLiteral(resourceName: "brightnessDown"))
             return (
-                item: .staticButton(title: ""),
-                actions: [
-                    Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_BRIGHTNESS_DOWN))
-                ],
-                legacyAction: .none,
-                legacyLongAction: .none,
-                parameters: [.image: imageParameter]
+                    item: .staticButton(title: ""),
+                    actions: [
+                        Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_BRIGHTNESS_DOWN))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [.image: imageParameter]
             )
         },
 
         "illuminationUp": { _ in
             let imageParameter = GeneralParameter.image(source: #imageLiteral(resourceName: "ill_up"))
             return (
-                item: .staticButton(title: ""),
-                actions: [
-                    Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_ILLUMINATION_UP))
-                ],
-                legacyAction: .none,
-                legacyLongAction: .none,
-                parameters: [.image: imageParameter]
+                    item: .staticButton(title: ""),
+                    actions: [
+                        Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_ILLUMINATION_UP))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [.image: imageParameter]
             )
         },
 
         "illuminationDown": { _ in
             let imageParameter = GeneralParameter.image(source: #imageLiteral(resourceName: "ill_down"))
             return (
-                item: .staticButton(title: ""),
-                actions: [
-                    Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_ILLUMINATION_DOWN))
-                ],
-                legacyAction: .none,
-                legacyLongAction: .none,
-                parameters: [.image: imageParameter]
+                    item: .staticButton(title: ""),
+                    actions: [
+                        Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_ILLUMINATION_DOWN))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [.image: imageParameter]
             )
         },
 
         "volumeDown": { _ in
             let imageParameter = GeneralParameter.image(source: NSImage(named: NSImage.touchBarVolumeDownTemplateName)!)
             return (
-                item: .staticButton(title: ""),
-                actions: [
-                    Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_SOUND_DOWN))
-                ],
-                legacyAction: .none,
-                legacyLongAction: .none,
-                parameters: [.image: imageParameter]
+                    item: .staticButton(title: ""),
+                    actions: [
+                        Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_SOUND_DOWN))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [.image: imageParameter]
             )
         },
 
         "volumeUp": { _ in
             let imageParameter = GeneralParameter.image(source: NSImage(named: NSImage.touchBarVolumeUpTemplateName)!)
             return (
-                item: .staticButton(title: ""),
-                actions: [
-                    Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_SOUND_UP))
-                ],
-                legacyAction: .none,
-                legacyLongAction: .none,
-                parameters: [.image: imageParameter]
+                    item: .staticButton(title: ""),
+                    actions: [
+                        Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_SOUND_UP))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [.image: imageParameter]
             )
         },
 
         "mute": { _ in
             let imageParameter = GeneralParameter.image(source: NSImage(named: NSImage.touchBarAudioOutputMuteTemplateName)!)
             return (
-                item: .staticButton(title: ""),
-                actions: [
-                    Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_MUTE))
-                ],
-                legacyAction: .none,
-                legacyLongAction: .none,
-                parameters: [.image: imageParameter]
+                    item: .staticButton(title: ""),
+                    actions: [
+                        Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_MUTE))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [.image: imageParameter]
             )
         },
 
         "previous": { _ in
             let imageParameter = GeneralParameter.image(source: NSImage(named: NSImage.touchBarRewindTemplateName)!)
             return (
-                item: .staticButton(title: ""),
-                actions: [
-                    Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_PREVIOUS))
-                ],
-                legacyAction: .none,
-                legacyLongAction: .none,
-                parameters: [.image: imageParameter]
+                    item: .staticButton(title: ""),
+                    actions: [
+                        Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_PREVIOUS))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [.image: imageParameter]
             )
         },
 
         "play": { _ in
             let imageParameter = GeneralParameter.image(source: NSImage(named: NSImage.touchBarPlayPauseTemplateName)!)
             return (
-                item: .staticButton(title: ""),
-                actions: [
-                    Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_PLAY))
-                ],
-                legacyAction: .none,
-                legacyLongAction: .none,
-                parameters: [.image: imageParameter]
+                    item: .staticButton(title: ""),
+                    actions: [
+                        Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_PLAY))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [.image: imageParameter]
             )
         },
 
         "next": { _ in
             let imageParameter = GeneralParameter.image(source: NSImage(named: NSImage.touchBarFastForwardTemplateName)!)
             return (
-                item: .staticButton(title: ""),
-                actions: [
-                    Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_NEXT))
-                ],
-                legacyAction: .none,
-                legacyLongAction: .none,
-                parameters: [.image: imageParameter]
+                    item: .staticButton(title: ""),
+                    actions: [
+                        Action(trigger: .singleTap, value: .hidKey(keycode: NX_KEYTYPE_NEXT))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [.image: imageParameter]
             )
         },
 
-        "sleep": { _ in (
-            item: .staticButton(title: "☕️"),
-            actions: [
-                Action(trigger: .singleTap, value: .shellScript(executable: "/usr/bin/pmset", parameters: ["sleepnow"]))
-            ],
-            legacyAction: .none,
-            legacyLongAction: .none,
-            parameters: [:]
-        ) },
+        "sleep": { _ in
+            (
+                    item: .staticButton(title: "☕️"),
+                    actions: [
+                        Action(trigger: .singleTap, value: .shellScript(executable: "/usr/bin/pmset", parameters: ["sleepnow"]))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [:]
+            )
+        },
 
-        "displaySleep": { _ in (
-            item: .staticButton(title: "☕️"),
-            actions: [
-                Action(trigger: .singleTap, value: .shellScript(executable: "/usr/bin/pmset", parameters: ["displaysleepnow"]))
-            ],
-            legacyAction: .none,
-            legacyLongAction: .none,
-            parameters: [:]
-        ) },
+        "displaySleep": { _ in
+            (
+                    item: .staticButton(title: "☕️"),
+                    actions: [
+                        Action(trigger: .singleTap, value: .shellScript(executable: "/usr/bin/pmset", parameters: ["displaysleepnow"]))
+                    ],
+                    legacyAction: .none,
+                    legacyLongAction: .none,
+                    parameters: [:]
+            )
+        },
 
     ]
 
     static let sharedInstance = SupportedTypesHolder()
 
     func lookup(by type: String, actions: [Action]) -> ParametersDecoder {
-        return supportedTypes[type] ?? { decoder in (
-            item: try ItemType(from: decoder),
-            actions: actions,
-            legacyAction: try LegacyActionType(from: decoder),
-            legacyLongAction: try LegacyLongActionType(from: decoder),
-            parameters: [:]
-        ) }
+        return supportedTypes[type] ?? { decoder in
+            (
+                    item: try ItemType(from: decoder),
+                    actions: actions,
+                    legacyAction: try LegacyActionType(from: decoder),
+                    legacyLongAction: try LegacyLongActionType(from: decoder),
+                    parameters: [:]
+            )
+        }
     }
 
     func register(typename: String, decoder: @escaping ParametersDecoder) {
@@ -245,11 +257,11 @@ class SupportedTypesHolder {
     func register(typename: String, item: ItemType, actions: [Action], legacyAction: LegacyActionType, legacyLongAction: LegacyLongActionType) {
         register(typename: typename) { _ in
             (
-                item: item,
-                actions,
-                legacyAction,
-                legacyLongAction,
-                parameters: [:]
+                    item: item,
+                    actions,
+                    legacyAction,
+                    legacyLongAction,
+                    parameters: [:]
             )
         }
     }
@@ -270,7 +282,7 @@ enum ItemType: Decodable {
     case currency(interval: Double, from: String, to: String, full: Bool)
     case inputsource
     case music(interval: Double, disableMarquee: Bool)
-    case group(items: [BarItemDefinition])
+    case group(source: SourceProtocol, refreshInterval: Double, items: [BarItemDefinition])
     case nightShift
     case dnd
     case pomodoro(workTime: Double, restTime: Double)
@@ -278,6 +290,7 @@ enum ItemType: Decodable {
     case darkMode
     case swipe(direction: String, fingers: Int, minOffset: Float, sourceApple: SourceProtocol?, sourceBash: SourceProtocol?)
     case upnext(from: Double, to: Double, maxToShow: Int, autoResize: Bool)
+    case stock(code: String)
 
     private enum CodingKeys: String, CodingKey {
         case type
@@ -310,6 +323,7 @@ enum ItemType: Decodable {
         case fingers
         case minOffset
         case maxToShow
+        case code
     }
 
     enum ItemTypeRaw: String, Decodable {
@@ -335,6 +349,7 @@ enum ItemType: Decodable {
         case darkMode
         case swipe
         case upnext
+        case stock
     }
 
     init(from decoder: Decoder) throws {
@@ -346,7 +361,7 @@ enum ItemType: Decodable {
             let interval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 1800.0
             let alternativeImages = try container.decodeIfPresent([String: Source].self, forKey: .alternativeImages) ?? [:]
             self = .appleScriptTitledButton(source: source, refreshInterval: interval, alternativeImages: alternativeImages)
-            
+
         case .shellScriptTitledButton:
             let source = try container.decode(Source.self, forKey: .source)
             let interval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 1800.0
@@ -364,7 +379,7 @@ enum ItemType: Decodable {
 
         case .battery:
             self = .battery
-            
+
         case .cpu:
             let refreshInterval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 5.0
             self = .cpu(refreshInterval: refreshInterval)
@@ -387,7 +402,7 @@ enum ItemType: Decodable {
             let api_key = try container.decodeIfPresent(String.self, forKey: .api_key) ?? "32c4256d09a4c52b38aecddba7a078f6"
             let icon_type = try container.decodeIfPresent(String.self, forKey: .icon_type) ?? "text"
             self = .weather(interval: interval, units: units, api_key: api_key, icon_type: icon_type)
-            
+
         case .yandexWeather:
             let interval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 1800.0
             self = .yandexWeather(interval: interval)
@@ -408,8 +423,10 @@ enum ItemType: Decodable {
             self = .music(interval: interval, disableMarquee: disableMarquee)
 
         case .group:
+            let source = try container.decode(Source.self, forKey: .source)
+            let interval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 1800.0
             let items = try container.decode([BarItemDefinition].self, forKey: .items)
-            self = .group(items: items)
+            self = .group(source: source, refreshInterval: interval, items: items)
 
         case .nightShift:
             self = .nightShift
@@ -428,7 +445,7 @@ enum ItemType: Decodable {
 
         case .darkMode:
             self = .darkMode
-            
+
         case .swipe:
             let sourceApple = try container.decodeIfPresent(Source.self, forKey: .sourceApple)
             let sourceBash = try container.decodeIfPresent(Source.self, forKey: .sourceBash)
@@ -444,11 +461,15 @@ enum ItemType: Decodable {
             let autoResize = try container.decodeIfPresent(Bool.self, forKey: .autoResize) ?? false
             let interval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 60.0
             self = .upnext(from: from, to: to, maxToShow: maxToShow, autoResize: autoResize)
+        case .stock:
+            let code = try container.decode(String.self, forKey: .code)
+            self = .stock(code: code);
         }
+
     }
 }
 
-struct FailableDecodable<Base : Decodable> : Decodable {
+struct FailableDecodable<Base: Decodable>: Decodable {
 
     let base: Base?
 
@@ -465,7 +486,7 @@ struct Action: Decodable {
         case tripleTap
         case longTap
     }
-    
+
     enum Value {
         case none
         case hidKey(keycode: Int32)
@@ -475,7 +496,7 @@ struct Action: Decodable {
         case custom(closure: () -> Void)
         case openUrl(url: String)
     }
-    
+
     private enum ActionTypeRaw: String, Decodable {
         case hidKey
         case keyPress
@@ -483,7 +504,7 @@ struct Action: Decodable {
         case shellScript
         case openUrl
     }
-    
+
     enum CodingKeys: String, CodingKey {
         case trigger
         case action
@@ -493,13 +514,13 @@ struct Action: Decodable {
         case shellArguments
         case url
     }
-    
+
     let trigger: Trigger
     let value: Value
-    
+
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         trigger = try container.decode(Trigger.self, forKey: .trigger)
         let type = try container.decodeIfPresent(ActionTypeRaw.self, forKey: .action)
 
@@ -528,7 +549,7 @@ struct Action: Decodable {
             value = .none
         }
     }
-    
+
     init(trigger: Trigger, value: Value) {
         self.trigger = trigger
         self.value = value
@@ -807,7 +828,9 @@ enum Align: String, Decodable {
 
 extension URL {
     var appleScript: NSAppleScript? {
-        guard FileManager.default.fileExists(atPath: path) else { return nil }
+        guard FileManager.default.fileExists(atPath: path) else {
+            return nil
+        }
         return NSAppleScript(contentsOf: self, error: nil)
     }
 }

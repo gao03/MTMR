@@ -5,6 +5,7 @@
 //  Created by Daniel Apatin on 11.05.2018.
 //  Copyright © 2018 Anton Palgunov. All rights reserved.
 //
+
 import Cocoa
 
 class GroupBarItem: NSPopoverTouchBarItem, NSTouchBarDelegate {
@@ -19,17 +20,26 @@ class GroupBarItem: NSPopoverTouchBarItem, NSTouchBarDelegate {
     var scrollArea: NSCustomTouchBarItem?
     var centerScrollArea = NSTouchBarItem.Identifier("com.toxblh.mtmr.scrollArea.".appending(UUID().uuidString))
 
-    init(identifier: NSTouchBarItem.Identifier, items: [BarItemDefinition]) {
+    var button: NSButton? {
+        get {
+            if let button = collapsedRepresentation as? NSButton {
+                return button
+            }
+            return nil
+        }
+    }
+
+    init(identifier: NSTouchBarItem.Identifier, source: SourceProtocol, interval: TimeInterval, items: [BarItemDefinition]) {
         jsonItems = items
         super.init(identifier: identifier)
         popoverTouchBar.delegate = self
+
+        ShellScriptHelper.register(identifier: identifier, interval: interval, source: source, callback: self.updateTitle);
     }
 
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    deinit {}
 
     @objc override func showPopover(_: Any?) {
         itemDefinitions = [:]
@@ -61,16 +71,33 @@ class GroupBarItem: NSPopoverTouchBarItem, NSTouchBarDelegate {
 
     func touchBar(_: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
         if identifier == centerScrollArea {
+            DispatchQueueHelper.unregisterAllTask()
+            ChineseStockHelper.register(items: items)
             return scrollArea
         }
 
         guard let item = self.items[identifier],
-            let definition = self.itemDefinitions[identifier],
-            definition.align != .center else {
+              let definition = self.itemDefinitions[identifier],
+              definition.align != .center else {
             return nil
         }
         return item
     }
+
+    func updateTitle(title: NSAttributedString, image: NSImage?, scriptResult: String) {
+        button?.attributedTitle = title
+        button?.imagePosition = title.length > 0 ? .imageLeading : .imageOnly
+        if image != nil {
+            button?.image = image
+        }
+    }
+
+    var isBordered: Bool = true {
+        didSet {
+            button?.isBordered = isBordered
+        }
+    }
+
 
     func loadItemDefinitions(jsonItems: [BarItemDefinition]) {
         let dateFormatter = DateFormatter()

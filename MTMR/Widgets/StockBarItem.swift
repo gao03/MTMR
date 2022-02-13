@@ -29,7 +29,7 @@ class StockBarItem: CustomButtonTouchBarItem {
         if type == nil {
             return
         }
-        let url = "https://xueqiu.com/S/S" + (type! == 0 ? "Z" : "H") + code
+        let url = "https://xueqiu.com/S/S" + (type! == 0 ? "Z" : type! == 1 ? "H" : "") + code
         if let url = URL(string: url), NSWorkspace.shared.open(url) {
             #if DEBUG
             print("URL was successfully opened")

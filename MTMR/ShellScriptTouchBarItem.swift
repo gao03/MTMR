@@ -11,11 +11,6 @@ import Foundation
 class ShellScriptTouchBarItem: CustomButtonTouchBarItem {
     private var forceHideConstraint: NSLayoutConstraint!
 
-    struct ScriptResult: Decodable {
-        var title: String?
-        var image: Source?
-    }
-
     init?(identifier: NSTouchBarItem.Identifier, source: SourceProtocol, interval: TimeInterval) {
         super.init(identifier: identifier, title: "⏳")
 

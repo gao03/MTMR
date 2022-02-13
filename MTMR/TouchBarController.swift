@@ -165,7 +165,6 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
 
         updateActiveApp()
 
-        DispatchQueueHelper.unregisterAllTask()
         StockHelper.register(items: items)
     }
 
@@ -195,6 +194,9 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
     func reloadPreset(path: String) {
         lastPresetPath = path
         let items = path.fileData?.barItemDefinitions() ?? [BarItemDefinition(type: .staticButton(title: "bad preset"), actions: [], action: .none, legacyLongAction: .none, additionalParameters: [:])]
+
+        DispatchQueueHelper.unregisterAllTask()
+
         createAndUpdatePreset(newJsonItems: items)
     }
 

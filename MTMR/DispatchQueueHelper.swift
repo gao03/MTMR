@@ -29,7 +29,6 @@ class DispatchQueueHelper {
     }
 
     static func unregisterAllTask() {
-        print("unregisterAllTask")
         taskVersionMap.removeAll()
     }
 

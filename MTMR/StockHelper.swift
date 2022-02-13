@@ -31,6 +31,10 @@ class StockHelper {
             return
         }
 
+        if checkIsClose() && !stockInfoMap.isEmpty {
+            return
+        }
+
         let baseUrl = "https://push2.eastmoney.com/api/qt/ulist.np/get?fields=f2,f3,f12,f13,f14,f15,f16,f18,f232&fltt=2&secids="
         let url = baseUrl + codeList.map {
                     let code = $0
@@ -55,6 +59,26 @@ class StockHelper {
         }
 
         task.resume()
+    }
+
+    static func checkIsClose() -> Bool {
+        let date = Date()
+
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: date)
+        if weekday == 1 || weekday == 7 {
+            return true
+        }
+        let hour = calendar.component(.hour, from: date)
+        let minutes = calendar.component(.minute, from: date)
+        let totalMinutes = hour * 60 + minutes;
+
+        // 0 ~ 9:15 ||  15:10 ~ 24:00 休息
+        if totalMinutes < 9*60+15 || totalMinutes > 15*60+10 {
+            return true
+        }
+        // 11:40 ~ 13:00 休息
+        return totalMinutes > 11*60+40 && totalMinutes < 13*60
     }
 }
 

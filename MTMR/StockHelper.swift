@@ -5,14 +5,17 @@
 
 import Foundation
 
-class ChineseStockHelper {
+class StockHelper {
 
     private static var codeList: [String] = []
     private static var stockInfoMap: [String: StockInfo] = [:]
+    // http://quote.eastmoney.com/center/gridlist.html#hs_a_board
+    // 通过这个页面，抓包看 api/qt/stock/get 接口的参数，来判断用哪个类型
+    private static var STOCK_TYPE_LIST = [0, 1, 105, 106, 116] // 深A、沪A、美股1、美股2、港股
 
     static func register(items: [NSTouchBarItem.Identifier: NSTouchBarItem]) {
         codeList = items.values
-                .map({ ($0 as? ChineseStockBarItem)?.code ?? "" })
+                .map({ ($0 as? StockBarItem)?.code ?? "" })
                 .filter({ !($0.isEmpty) })
 
         DispatchQueueHelper.register(taskId: "stock", interval: 10.0, callback: update);
@@ -29,8 +32,11 @@ class ChineseStockHelper {
         }
 
         let baseUrl = "https://push2.eastmoney.com/api/qt/ulist.np/get?fields=f2,f3,f12,f13,f14,f15,f16,f18,f232&fltt=2&secids="
-
-        let url = baseUrl + codeList.map({ "0." + $0 + ",1." + $0; }).joined(separator: ",")
+        let url = baseUrl + codeList.map {
+                    let code = $0
+                    return STOCK_TYPE_LIST.map({ String(format: "%d.", $0) + code }).joined(separator: ",")
+                }
+                .joined(separator: ",")
         let urlRequest = URLRequest(url: URL(string: url)!)
 
         let task = URLSession.shared.dataTask(with: urlRequest) { data, _, error in

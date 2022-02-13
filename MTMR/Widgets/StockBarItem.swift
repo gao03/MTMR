@@ -5,7 +5,7 @@
 
 import Foundation
 
-class ChineseStockBarItem: CustomButtonTouchBarItem {
+class StockBarItem: CustomButtonTouchBarItem {
     public var code: String
     private var info: StockInfo?
 
@@ -44,7 +44,7 @@ class ChineseStockBarItem: CustomButtonTouchBarItem {
     }
 
     func updateStock() {
-        info = ChineseStockHelper.getStockByCode(code: code)
+        info = StockHelper.getStockByCode(code: code)
         if (info == nil) {
             title = "⏳" + code
         } else {

@@ -72,7 +72,7 @@ class GroupBarItem: NSPopoverTouchBarItem, NSTouchBarDelegate {
     func touchBar(_: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
         if identifier == centerScrollArea {
             DispatchQueueHelper.unregisterAllTask()
-            ChineseStockHelper.register(items: items)
+            StockHelper.register(items: items)
             return scrollArea
         }
 

@@ -1,3 +1,22 @@
+# 修改点
+## group 类型修改
+1. 支持 bordered 参数，配置是否显示 button 的轮廓
+2. 新增 refreshInterval 和 source 参数，效果和 shellScriptTitledButton 的一样，通过定时执行脚本来更新 title
+
+## 新增 stock 类型
+1. 配置示例，stock 类型有一个 code 参数，表示查询的股票类型
+    ```json
+      {
+        "type": "stock",
+        "code": "601988",
+        "bordered": true,
+        "width": 80
+      }
+    ```
+2. 用的是东方财富的接口，理论上支持 A股、港股、美股
+3. 为了减少 http 调用，会在后台开一个新的接口来轮训，代码见 StockHelper.swift
+
+---
 # My touchbar. My rules. [![GitHub release](https://img.shields.io/github/release/toxblh/MTMR.svg)](https://github.com/Toxblh/MTMR/releases) [![license](https://img.shields.io/github/license/Toxblh/MTMR.svg)](https://github.com/Toxblh/MTMR/blob/master/LICENSE) ![minimal system requirements](https://img.shields.io/badge/required-macOS%2010.12.2-blue.svg) ![travis](https://travis-ci.org/Toxblh/MTMR.svg?branch=master)
 
 <img src="Resources/logo.png" align="right"

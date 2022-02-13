@@ -72,9 +72,9 @@
 		BAF5AB5724317B4300B04904 /* BasicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF5AB5624317B4300B04904 /* BasicView.swift */; };
 		BAF5AB5924317CAF00B04904 /* SwipeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAF5AB5824317CAF00B04904 /* SwipeItem.swift */; };
 		C4B0A622F167608F80215C92 /* ShellScriptHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B0A80E5631204ECA77E64A /* ShellScriptHelper.swift */; };
-		C4B0A6E2C348A731E7A164B1 /* ChineseStockHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B0AD8C591F0DE4AFC725E6 /* ChineseStockHelper.swift */; };
+		C4B0A6E2C348A731E7A164B1 /* StockHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B0AD8C591F0DE4AFC725E6 /* StockHelper.swift */; };
 		C4B0A90E8FA6441F8887479A /* DispatchQueueHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B0A0E95E14439BFF0657C0 /* DispatchQueueHelper.swift */; };
-		C4B0AABDB9C6A840D837059B /* ChineseStockBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B0A8F03643D2BAAEB83264 /* ChineseStockBarItem.swift */; };
+		C4B0AABDB9C6A840D837059B /* StockBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4B0A8F03643D2BAAEB83264 /* StockBarItem.swift */; };
 		F29F6A2524BC7148004FF8E4 /* UpNextScrubberTouchBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F29F6A2424BC7148004FF8E4 /* UpNextScrubberTouchBarItem.swift */; };
 /* End PBXBuildFile section */
 
@@ -159,8 +159,8 @@
 		BAF5AB5824317CAF00B04904 /* SwipeItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeItem.swift; sourceTree = "<group>"; };
 		C4B0A0E95E14439BFF0657C0 /* DispatchQueueHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DispatchQueueHelper.swift; sourceTree = "<group>"; };
 		C4B0A80E5631204ECA77E64A /* ShellScriptHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShellScriptHelper.swift; sourceTree = "<group>"; };
-		C4B0A8F03643D2BAAEB83264 /* ChineseStockBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChineseStockBarItem.swift; sourceTree = "<group>"; };
-		C4B0AD8C591F0DE4AFC725E6 /* ChineseStockHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChineseStockHelper.swift; sourceTree = "<group>"; };
+		C4B0A8F03643D2BAAEB83264 /* StockBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockBarItem.swift; sourceTree = "<group>"; };
+		C4B0AD8C591F0DE4AFC725E6 /* StockHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StockHelper.swift; sourceTree = "<group>"; };
 		F29F6A2424BC7148004FF8E4 /* UpNextScrubberTouchBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpNextScrubberTouchBarItem.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -250,7 +250,7 @@
 				B0F3112420C9E35F0076BB88 /* SupportNSTouchBar.swift */,
 				C4B0A80E5631204ECA77E64A /* ShellScriptHelper.swift */,
 				C4B0A0E95E14439BFF0657C0 /* DispatchQueueHelper.swift */,
-				C4B0AD8C591F0DE4AFC725E6 /* ChineseStockHelper.swift */,
+				C4B0AD8C591F0DE4AFC725E6 /* StockHelper.swift */,
 			);
 			path = MTMR;
 			sourceTree = "<group>";
@@ -326,7 +326,7 @@
 				B08126F0217BE19000A98970 /* WidgetProtocol.swift */,
 				B0F54A792295AC7D00B4C509 /* DarkModeBarItem.swift */,
 				F29F6A2424BC7148004FF8E4 /* UpNextScrubberTouchBarItem.swift */,
-				C4B0A8F03643D2BAAEB83264 /* ChineseStockBarItem.swift */,
+				C4B0A8F03643D2BAAEB83264 /* StockBarItem.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -513,9 +513,9 @@
 				368EDDE720812A1D00E10953 /* ScrollViewItem.swift in Sources */,
 				B04B7BB72087398C00C835D0 /* BatteryBarItem.swift in Sources */,
 				C4B0A622F167608F80215C92 /* ShellScriptHelper.swift in Sources */,
-				C4B0AABDB9C6A840D837059B /* ChineseStockBarItem.swift in Sources */,
+				C4B0AABDB9C6A840D837059B /* StockBarItem.swift in Sources */,
 				C4B0A90E8FA6441F8887479A /* DispatchQueueHelper.swift in Sources */,
-				C4B0A6E2C348A731E7A164B1 /* ChineseStockHelper.swift in Sources */,
+				C4B0A6E2C348A731E7A164B1 /* StockHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

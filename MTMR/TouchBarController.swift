@@ -166,7 +166,7 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
         updateActiveApp()
 
         DispatchQueueHelper.unregisterAllTask()
-        ChineseStockHelper.register(items: items)
+        StockHelper.register(items: items)
     }
 
     @objc func activeApplicationChanged(_: Notification) {
@@ -332,7 +332,7 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
         case let .upnext(from: from, to: to, maxToShow: maxToShow, autoResize: autoResize):
             barItem = UpNextScrubberTouchBarItem(identifier: identifier, interval: 60, from: from, to: to, maxToShow: maxToShow, autoResize: autoResize)
         case let .stock(code: code):
-            barItem = ChineseStockBarItem(identifier: identifier, code: code)
+            barItem = StockBarItem(identifier: identifier, code: code)
         }
 
         if let action = self.action(forItem: item), let item = barItem as? CustomButtonTouchBarItem {

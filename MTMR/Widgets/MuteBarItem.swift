@@ -17,7 +17,7 @@ class MuteBarItem: CustomButtonTouchBarItem {
         try super.init(from: decoder)
         
         self.setImage(NSImage(named: NSImage.touchBarAudioOutputMuteTemplateName)!)
-        self.setTapAction(EventAction().setHidKeyClosure(keycode: NX_KEYTYPE_MUTE))
+        self.addAction(ItemAction(.singleTap).setHidKeyClosure(keycode: NX_KEYTYPE_MUTE))
     }
 
     required init?(coder _: NSCoder) {

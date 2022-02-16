@@ -19,16 +19,16 @@ class AppScrubberTouchBarItem: CustomTouchBarItem {
     private var frontmostApplicationIdentifier: String? {
         return NSWorkspace.shared.frontmostApplication?.bundleIdentifier
     }
-    
+
     enum ParsingErrors: Error {
         case IncorrectRegex(description: String)
     }
-    
+
     private enum CodingKeys: String, CodingKey {
         case autoResize
         case filter
     }
-    
+
     override class var typeIdentifier: String {
         return "dock"
     }
@@ -49,13 +49,13 @@ class AppScrubberTouchBarItem: CustomTouchBarItem {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         self.autoResize = try container.decodeIfPresent(Bool.self, forKey: .autoResize) ?? false
         let filterRegexString = try container.decodeIfPresent(String.self, forKey: .filter)
-        
+
         if let filterRegexString = filterRegexString {
             let regex = try? NSRegularExpression(pattern: filterRegexString, options: [])
             if regex == nil {
@@ -65,12 +65,12 @@ class AppScrubberTouchBarItem: CustomTouchBarItem {
         } else {
             self.filter = nil
         }
-        
+
         try super.init(from: decoder)
         view = scrollView
         self.setup()
     }
-    
+
     func setup() {
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(hardReloadItems), name: NSWorkspace.didLaunchApplicationNotification, object: nil)
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(hardReloadItems), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
@@ -79,7 +79,7 @@ class AppScrubberTouchBarItem: CustomTouchBarItem {
         persistentAppIdentifiers = AppSettings.dockPersistentAppIds
         hardReloadItems()
     }
-    
+
 
     @objc func hardReloadItems() {
         applications = launchedApplications()
@@ -122,17 +122,14 @@ class AppScrubberTouchBarItem: CustomTouchBarItem {
     public func createAppButton(for app: DockItem) -> DockBarItem {
         let item = DockBarItem(app)
         item.isBordered = false
-        
-        item.setTapAction(
-            EventAction({ [weak self] (_ caller: CustomButtonTouchBarItem) in
+        item.actions.append(contentsOf: [
+            ItemAction( .singleTap) { [weak self] in
                 self?.switchToApp(app: app)
-            } )
-        )
-        item.setLongTapAction(
-            EventAction({ [weak self] (_ caller: CustomButtonTouchBarItem) in
+            },
+            ItemAction(.longTap) { [weak self] in
                 self?.handleHalfLongPress(item: app)
-            } )
-        )
+            }
+        ])
         item.killAppClosure = {[weak self] in
             self?.handleLongPress(item: app)
         }
@@ -288,7 +285,7 @@ class DockBarItem: CustomButtonTouchBarItem {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     required init(from decoder: Decoder) {
         fatalError("init(from decoder:) has not been implemented")
     }

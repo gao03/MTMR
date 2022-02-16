@@ -18,7 +18,7 @@ My idea is to create a platform for creating plugins to customize the TouchBar. 
 <a href="https://t.me/joinchat/AmVYGg8vW38c13_3MxdE_g"><img height="20px" src="https://telegram.org/img/t_logo.png" /> Telegram</a>
 </p>
 
-<p align="center"><a href="https://www.paypal.me/toxblh/10" title="Donate via Paypal"><img height="36px" src="Resources/support_paypal.svg" alt="PayPal donate button" /></a>
+<p align="center"><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=WUAAG2HH58WE4" title="Donate via Paypal"><img height="36px" src="Resources/support_paypal.svg" alt="PayPal donate button" /></a>
 <a href="https://www.buymeacoffee.com/toxblh" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" height="36px" ></a>
 <a href="https://www.patreon.com/bePatron?u=9900748"><img height="36px"  src="https://c5.patreon.com/external/logo/become_a_patron_button.png" srcset="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png 2x"></a>
 <a href="https://www.producthunt.com/posts/my-touchbar-my-rules-mtmr">
@@ -27,8 +27,8 @@ My idea is to create a platform for creating plugins to customize the TouchBar. 
 
 ## Installation
 
-- Download lastest [release](https://github.com/Toxblh/MTMR/releases) (.dmg) from github
-- Or via Homebrew `brew cask install mtmr`
+- Download latest [release](https://github.com/Toxblh/MTMR/releases) (.dmg) from github
+- Or via Homebrew `brew install --cask mtmr`
 - [Dario Prski](https://medium.com/@urdigitalpulse) has written a [fantastic article on medium](https://medium.com/@urdigitalpulse/customise-your-macbook-pro-touch-bar-966998e606b5) that goes into more detail on installing MTMR
 
 **On first install** you need to allow access for MTMR in Accessibility otherwise buttons like <kbd>Esc</kbd>, <kbd>Volume</kbd>, <kbd>Brightness</kbd> and other system keys won't work
@@ -73,6 +73,7 @@ The pre-installed configuration contains less or more than you'll probably want,
 
 - timeButton
 - battery
+- cpu
 - currency
 - weather
 - yandexWeather
@@ -84,6 +85,7 @@ The pre-installed configuration contains less or more than you'll probably want,
 - darkMode
 - pomodoro
 - network
+- upnext (Calendar events)
 
 > Media Keys
 
@@ -104,16 +106,11 @@ The pre-installed configuration contains less or more than you'll probably want,
 
 ## Gestures
 
-### Default Gestures
+By default you can enable basic gestures from application menu (status bar -> MTMR icon -> Volume/Brightness gestures):
+- two finger slide: change you Volume
+- three finger slide: change you Brightness
 
-By default you can enable basic gestures from application menu (status bar -> MTMR icon ->  Default Swipe Gestures):
-
-- ```one finger slide```: Move Caret
-- ```two finger slide```: Move Caret with precision
-- ```three finger slide```: Increase/Decrease Volume
-- ```four finger slide```: Increase/Decrease Brightness
-
-### Custom Gestures
+### Custom gestures
 
 You can add custom actions for two/three/four finger swipes. To do it, you need to use `swipe` type:
 
@@ -121,7 +118,7 @@ You can add custom actions for two/three/four finger swipes. To do it, you need 
     "type": "swipe",
     "fingers": 2,            // number of fingers required (2,3 or 4)
     "direction": "right",    // direction of swipe (right/left)
-    "minOffset" 10,          // optional: minimal required offset for gesture to emit event
+    "minOffset": 10,          // optional: minimal required offset for gesture to emit event
     "sourceApple": {         // optional: apple script to run
         "inline": "beep"
     },
@@ -163,7 +160,7 @@ You may create as many `swipe` objects in the preset as you want.
 ```
 
 > Note: appleScriptTitledButton can change its icon. To do it, you need to do the following things:
-1. Declarate dictionary of icons in `alternativeImages` field
+1. Declare dictionary of icons in `alternativeImages` field
 2. Make you script return array of two values - `{"TITLE", "IMAGE_LABEL"}`
 3. Make sure that your `IMAGE_LABEL` is declared in `alternativeImages` field
 
@@ -193,7 +190,7 @@ Example:
 > Note: script may return also colors using escape sequences (read more here https://misc.flogisoft.com/bash/tip_colors_and_formatting)
 > Only "16 Colors" mode supported atm. If background color returned, button will pick it up as own background color.
 
-Example of "CPU load" button which also changes color based on load value.
+Example of "CPU load" button which also changes color based on load value (Note: you can use native `cpu` plugin for that purpose which runs better):
 ```js
 {
   "type": "shellScriptTitledButton",
@@ -202,10 +199,15 @@ Example of "CPU load" button which also changes color based on load value.
   "source": {
     "inline": "top -l 2 -n 0 -F | egrep -o ' \\d*\\.\\d+% idle' | tail -1 | awk -F% '{p = 100 - $1; if (p > 30) c = \"\\033[33m\"; if (p > 70) c = \"\\033[30;43m\"; printf \"%s%4.1f%%\\n\", c, p}'"
   },
-  "action": "appleScript",
-  "actionAppleScript": {
-    "inline": "activate application \"Activity Monitor\"\rtell application \"System Events\"\r\ttell process \"Activity Monitor\"\r\t\ttell radio button \"CPU\" of radio group 1 of group 2 of toolbar 1 of window 1 to perform action \"AXPress\"\r\tend tell\rend tell"
-  },
+  "actions": [
+    {
+      "trigger": "singleTap",
+      "action": "appleScript",
+      "actionAppleScript": {
+        "inline": "activate application \"Activity Monitor\"\rtell application \"System Events\"\r\ttell process \"Activity Monitor\"\r\t\ttell radio button \"CPU\" of radio group 1 of group 2 of toolbar 1 of window 1 to perform action \"AXPress\"\r\tend tell\rend tell"
+      }
+    }
+  ],
   "align": "right",
   "image": {
     // Or you can specify a filePath here.
@@ -245,6 +247,19 @@ To close a group, use the button:
 
 ## Native plugins
 
+#### `cpu`
+
+> Shows current CPU load in percents, changes color based on load value. 
+> Has lower power consumption and more stable in comparison to shell-based solution.
+
+```js
+{
+  "type": "cpu",
+  "refreshInterval": 3,
+  "width": 80
+}
+```
+
 #### `timeButton`
 
 > Attention! Works not all: https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations
@@ -273,7 +288,7 @@ To close a group, use the button:
   "type": "weather",
   "refreshInterval": 600, // in seconds
   "units": "metric", // or imperial
-  "icon_type": "text" // or images
+  "icon_type": "text", // or images
   "api_key": "" // you can get the key on openweather
 ```
 
@@ -348,7 +363,45 @@ To close a group, use the button:
 },
 ```
 
+#### `upnext`
+
+> Calendar next event plugin
+Displays upcoming events from macOS Calendar.  Does not display current event.
+
+```js
+{
+  "type": "upnext",
+  "from": 0, // Lower bound of search range for next event in hours.        Default 0 (current time)(can be negative to view events in the past)
+  "to": 12, // Upper bounds of search range for next event in hours.        Default 12 (12 hours in the future)
+  "maxToShow": 3, // Limits the maximum number of events displayed.          Default 3 (the first 3 upcoming events)
+  "autoResize": false // If true, widget will expand to display all events. Default false (scrollable view within "width")
+},
+```
+
+
+
 ## Actions:
+
+### Example:
+
+```js
+"actions": [
+  {
+    "trigger": "singleTap",
+    "action": "hidKey",
+    "keycode": 53
+  }
+]
+```
+
+### Triggers:
+
+- `singleTap`
+- `doubleTap`
+- `tripleTap`
+- `longTap`
+
+### Types
 
 - `hidKey`
   > https://github.com/aosm/IOHIDFamily/blob/master/IOHIDSystem/IOKit/hidsystem/ev_keymap.h use only numbers
@@ -390,22 +443,6 @@ To close a group, use the button:
  "action": "openUrl",
  "url": "https://google.com",
 ```
-
-## LongActions
-
-If you want to longPress for some operations, it is similar to the configuration for Actions but with additional parameters, for example:
-
-```js
- "longAction": "hidKey",
- "longKeycode": 53,
-```
-
-- longAction
-- longKeycode
-- longActionAppleScript
-- longExecutablePath
-- longShellArguments
-- longUrl
 
 ## Additional parameters:
 
@@ -451,40 +488,21 @@ by using background with color "#000000" and bordered == false you can create bu
   }
 ```
 
+## Troubleshooting
 
-### Roadmap
+#### If you can't open preferences:
+- Opening another program which can't edit text
+    1. Open Terminal.app
+    2. Put `open -a TextEdit ~/Library/Application\ Support/MTMR/items.json` command and press <kbd>Enter</kbd>
 
-- [x] Create the first prototype with TouchBar in Storyboard
-- [x] Put in stripe menu on startup the application
-- [x] Find how to simulate real buttons like brightness, volume, night shift and etc.
-- [x] Time in touchbar!
-- [x] First the weather plugin
-- [x] Find how to open full-screen TouchBar without the cross and stripe menu
-- [x] Find how to add haptic feedback
-- [x] Add icon and menu in StatusBar
-- [x] Hide from Dock
-- [x] Status menu: "preferences", "quit"
-- [x] JSON or another approch for save preset, maybe in `~/Library/Application Support/MTMR/`
-- [x] Custom buttons size, actions by click
-- [x] Layout: [always left, NSSliderView for center, always right]
-- [x] System for autoupdate (https://sparkle-project.org/)
-- [ ] Overwrite default values from item types (e.g. title for brightness)
-- [ ] Custom settings for paddings and margins for buttons
-- [ ] XPC Service for scripts
-- [ ] UI for settings
-- [ ] Import config from BTT
 
-Settings:
+#### Buttons or gestures doesn't work:
+- "After the last update my mtmr is not working anymore!"
+- "Buttons sometimes do not trigger action"
+- "ESC don't work"
+- "Gestures don't work"
 
-- [ ] Interface for plugins and export like presets
-- [x] Startup at login
-- [ ] Show on/off in Dock
-- [ ] Show on/off in StatusBar
-- [ x] On/off Haptic Feedback
-
-Maybe:
-
-- [ ] Refactoring the application into packages (AppleScript, JavaScript? and Swift?)
+Re-tick or check a tick for access 🍏→ System Preferences → Security and Privacy → tab Privacy → Accessibility → MTMR
 
 ## Credits
 

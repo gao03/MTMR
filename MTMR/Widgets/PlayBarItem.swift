@@ -17,7 +17,7 @@ class PlayBarItem: CustomButtonTouchBarItem {
         try super.init(from: decoder)
         
         self.setImage(NSImage(named: NSImage.touchBarPlayPauseTemplateName)!)
-        self.setTapAction(EventAction().setHidKeyClosure(keycode: NX_KEYTYPE_PLAY))
+        self.addAction(ItemAction(.singleTap).setHidKeyClosure(keycode: NX_KEYTYPE_PLAY))
     }
 
     required init?(coder _: NSCoder) {

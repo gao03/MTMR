@@ -17,7 +17,7 @@ class VolumeUpBarItem: CustomButtonTouchBarItem {
         try super.init(from: decoder)
         
         self.setImage(NSImage(named: NSImage.touchBarVolumeUpTemplateName)!)
-        self.setTapAction(EventAction().setHidKeyClosure(keycode: NX_KEYTYPE_SOUND_UP))
+        self.addAction(ItemAction(.singleTap).setHidKeyClosure(keycode: NX_KEYTYPE_SOUND_UP))
     }
 
     required init?(coder _: NSCoder) {

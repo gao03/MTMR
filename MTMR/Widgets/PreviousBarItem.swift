@@ -17,7 +17,7 @@ class PreviousBarItem: CustomButtonTouchBarItem {
         try super.init(from: decoder)
         
         self.setImage(NSImage(named: NSImage.touchBarRewindTemplateName)!)
-        self.setTapAction(EventAction().setHidKeyClosure(keycode: NX_KEYTYPE_PREVIOUS))
+        self.addAction(ItemAction(.singleTap).setHidKeyClosure(keycode: NX_KEYTYPE_PREVIOUS))
     }
 
     required init?(coder _: NSCoder) {

@@ -17,7 +17,7 @@ class NextBarItem: CustomButtonTouchBarItem {
         try super.init(from: decoder)
         
         self.setImage(NSImage(named: NSImage.touchBarFastForwardTemplateName)!)
-        self.setTapAction(EventAction().setHidKeyClosure(keycode: NX_KEYTYPE_NEXT))
+        self.addAction(ItemAction(.singleTap).setHidKeyClosure(keycode: NX_KEYTYPE_NEXT))
     }
 
     required init?(coder _: NSCoder) {

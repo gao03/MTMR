@@ -11,7 +11,7 @@ import Foundation
 class NightShiftBarItem: CustomButtonTouchBarItem {
     private let nsclient = CBBlueLightClient()
     private var timer: Timer!
-    
+
     override class var typeIdentifier: String {
         return "nightShift"
     }
@@ -32,32 +32,22 @@ class NightShiftBarItem: CustomButtonTouchBarItem {
 
     init(identifier: NSTouchBarItem.Identifier) {
         super.init(identifier: identifier, title: "")
-        self.setup()
-    }
-
-    required init?(coder _: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    required init(from decoder: Decoder) throws {
-        try super.init(from: decoder)
-        self.setup()
-    }
-    
-    func setup() {
+        isBordered = false
         if getWidth() == 0.0 {
             setWidth(value: 28)
         }
 
-        self.setTapAction(
-            EventAction( { [weak self] (_ caller: CustomButtonTouchBarItem) in
-                self?.nightShiftAction()
-            } )
-        )
+        actions.append(ItemAction(.singleTap) { [weak self] in self?.nightShiftAction() })
 
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(refresh), userInfo: nil, repeats: true)
 
         refresh()
+    }
+    required init(from decoder: Decoder) throws {
+        try super.init(from: decoder)
+    }
+    required init?(coder : NSCoder) {
+        super.init(coder: coder)
     }
 
     func nightShiftAction() {

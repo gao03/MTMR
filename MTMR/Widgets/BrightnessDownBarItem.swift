@@ -17,7 +17,7 @@ class BrightnessDownBarItem: CustomButtonTouchBarItem {
         try super.init(from: decoder)
         
         self.setImage(#imageLiteral(resourceName: "brightnessDown"))
-        self.setTapAction(EventAction().setKeyPressClosure(keycode: 145))
+        self.addAction(SingleTapEventAction().setKeyPressClosure(keycode: 145))
     }
 
     required init?(coder _: NSCoder) {

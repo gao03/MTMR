@@ -17,7 +17,7 @@ class IlluminationDownBarItem: CustomButtonTouchBarItem {
         try super.init(from: decoder)
         
         self.setImage(#imageLiteral(resourceName: "ill_down"))
-        self.setTapAction(EventAction().setHidKeyClosure(keycode: NX_KEYTYPE_ILLUMINATION_DOWN))
+        self.addAction(ItemAction(.singleTap).setHidKeyClosure(keycode: NX_KEYTYPE_ILLUMINATION_DOWN))
     }
 
     required init?(coder _: NSCoder) {

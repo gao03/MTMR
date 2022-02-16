@@ -33,7 +33,7 @@ class MusicBarItem: CustomButtonTouchBarItem {
     private var songTitle: String?
     private var timer: Timer?
     private let iconSize = NSSize(width: 21, height: 21)
-    
+
     private enum CodingKeys: String, CodingKey {
         case refreshInterval
         case disableMarquee
@@ -42,27 +42,19 @@ class MusicBarItem: CustomButtonTouchBarItem {
     override class var typeIdentifier: String {
         return "music"
     }
-    
+
     init(identifier: NSTouchBarItem.Identifier, interval: TimeInterval, disableMarquee: Bool) {
         self.interval = interval
         self.disableMarquee = disableMarquee
 
         super.init(identifier: identifier, title: "⏳")
+        isBordered = false
 
-        self.setup()
-    }
-    
-    func setup() {
-        self.setTapAction(
-            EventAction({ [weak self] (_ caller: CustomButtonTouchBarItem) in
-                self?.playPause()
-            } )
-        )
-        self.setLongTapAction(
-            EventAction({ [weak self] (_ caller: CustomButtonTouchBarItem) in
-                self?.nextTrack()
-            } )
-        )
+        actions = [
+            ItemAction(.singleTap) { [weak self] in self?.playPause() },
+            ItemAction(.doubleTap) { [weak self] in self?.previousTrack() },
+            ItemAction(.longTap) { [weak self] in self?.nextTrack() }
+        ]
 
         refreshAndSchedule()
     }
@@ -79,14 +71,14 @@ class MusicBarItem: CustomButtonTouchBarItem {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.interval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 5.0
         self.disableMarquee = try container.decodeIfPresent(Bool.self, forKey: .disableMarquee) ?? false
-        
+
         try super.init(from: decoder)
-        self.setup()
+//        self.setup()
     }
 
     @objc func playPause() {
@@ -203,6 +195,31 @@ class MusicBarItem: CustomButtonTouchBarItem {
                                 }
                             }
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    @objc func previousTrack() {
+        for ident in playerBundleIdentifiers {
+            if let musicPlayer = SBApplication(bundleIdentifier: ident.rawValue) {
+                if musicPlayer.isRunning {
+                    if ident == .Spotify {
+                        let mp = (musicPlayer as SpotifyApplication)
+                        mp.previousTrack!()
+                        updatePlayer()
+                        return
+                    } else if ident == .iTunes {
+                        let mp = (musicPlayer as iTunesApplication)
+                        mp.previousTrack!()
+                        updatePlayer()
+                        return
+                    } else if ident == .Music {
+                        let mp = (musicPlayer as MusicApplication)
+                        mp.previousTrack!()
+                        updatePlayer()
+                        return
                     }
                 }
             }

@@ -14,7 +14,7 @@ class DnDBarItem: CustomButtonTouchBarItem {
     override class var typeIdentifier: String {
         return "dnd"
     }
-    
+
     init(identifier: NSTouchBarItem.Identifier) {
         super.init(identifier: identifier, title: "")
         self.setup()
@@ -23,22 +23,18 @@ class DnDBarItem: CustomButtonTouchBarItem {
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     required init(from decoder: Decoder) throws {
         try super.init(from: decoder)
         self.setup()
     }
-    
+
     func setup() {
         if getWidth() == 0.0 {
             setWidth(value: 32)
         }
 
-        self.setTapAction(
-            EventAction({ [weak self] (_ caller: CustomButtonTouchBarItem) in
-                self?.DnDToggle()
-            } )
-        )
+        actions.append(ItemAction(.singleTap) { [weak self] in self?.DnDToggle() })
 
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(refresh), userInfo: nil, repeats: true)
 

@@ -17,7 +17,7 @@ class EscapeBarItem: CustomButtonTouchBarItem {
         try super.init(from: decoder)
         
         self.title = "escape"
-        self.setTapAction(EventAction().setKeyPressClosure(keycode: 53))
+        self.addAction(ItemAction(.singleTap).setKeyPressClosure(keycode: 53))
         self.align = .left
     }
 

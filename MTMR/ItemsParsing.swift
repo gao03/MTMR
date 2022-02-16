@@ -3,13 +3,13 @@ import Foundation
 
 extension Data {
     func barItemDefinitions() -> [BarItemDefinition]? {
-        return try? JSONDecoder().decode([BarItemDefinition].self, from: utf8string!.stripComments().data(using: .utf8)!)
+        return try! JSONDecoder().decode([BarItemDefinition].self, from: utf8string!.stripComments().data(using: .utf8)!)
     }
 }
 
 struct BarItemDefinition: Decodable {
     let obj: CustomTouchBarItem
-    
+
     enum ParsingErrors: Error {
         case noMatchingType(description: String)
     }
@@ -17,15 +17,15 @@ struct BarItemDefinition: Decodable {
     private enum CodingKeys: String, CodingKey {
         case objtype = "type"
     }
-    
+
     static let types: [CustomTouchBarItem.Type] = [
-        
+
         // custom buttons
         CustomButtonTouchBarItem.self,
         AppleScriptTouchBarItem.self,
         ShellScriptTouchBarItem.self,
-        
-        
+
+
         // basic widget buttons
         EscapeBarItem.self,
         DeleteBarItem.self,
@@ -41,8 +41,9 @@ struct BarItemDefinition: Decodable {
         NextBarItem.self,
         SleepBarItem.self,
         DisplaySleepBarItem.self,
-        
-        
+        CPUBarItem.self,
+
+
         // custom widgets
         TimeTouchBarItem.self,
         BatteryBarItem.self,
@@ -59,8 +60,8 @@ struct BarItemDefinition: Decodable {
         PomodoroBarItem.self,
         NetworkBarItem.self,
         DarkModeBarItem.self,
-        
-        
+
+
         // custom-custom objects!
         SwipeItem.self,
         GroupBarItem.self,
@@ -75,16 +76,16 @@ struct BarItemDefinition: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let objType = try container.decode(String.self, forKey: .objtype)
-        
-        
+
+
         for obj in BarItemDefinition.types {
             if obj.typeIdentifier == objType {
                 self.obj = try obj.init(from: decoder)
                 return
             }
         }
-        
-        
+
+
         print("Cannot find preset mapping for \(objType)")
         throw ParsingErrors.noMatchingType(description: "Cannot find preset mapping for \(objType)")
     }

@@ -17,7 +17,7 @@ class DisplaySleepBarItem: CustomButtonTouchBarItem {
         try super.init(from: decoder)
         
         self.title = "☕️"
-        self.setTapAction(EventAction().setShellScriptClosure(executable: "/usr/bin/pmset", parameters: ["displaysleepnow"]))
+        self.addAction(ItemAction(.singleTap).setShellScriptClosure(executable: "/usr/bin/pmset", parameters: ["displaysleepnow"]))
     }
 
     required init?(coder _: NSCoder) {

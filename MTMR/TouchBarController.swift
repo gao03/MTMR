@@ -41,7 +41,7 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
         super.init()
 
         blacklistAppIdentifiers = AppSettings.blacklistedAppIds
-        
+
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(activeApplicationChanged), name: NSWorkspace.didLaunchApplicationNotification, object: nil)
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(activeApplicationChanged), name: NSWorkspace.didTerminateApplicationNotification, object: nil)
         NSWorkspace.shared.notificationCenter.addObserver(self, selector: #selector(activeApplicationChanged), name: NSWorkspace.didActivateApplicationNotification, object: nil)
@@ -65,8 +65,8 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
         let rightItems = items.compactMap({ (item) -> CustomTouchBarItem? in
             item.align == .right ? item : nil
         })
-        
-        
+
+
         let centerScrollArea = NSTouchBarItem.Identifier("com.toxblh.mtmr.scrollArea.".appending(UUID().uuidString))
         let scrollArea = ScrollViewItem(identifier: centerScrollArea, items: centerItems)
 
@@ -75,7 +75,7 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
         
         basicView = BasicView(identifier: basicViewIdentifier, items: leftItems + [scrollArea] + rightItems, swipeItems: swipeItems)
         basicView?.legacyGesturesEnabled = AppSettings.multitouchGestures
-        
+
         // it seems that we need to set width only after we added them to the view
         // so lets reset width here
         for item in items {
@@ -115,7 +115,7 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
         if path != nil {
             lastPresetPath = path!
         }
-        
+
         let items = lastPresetPath.fileData?.barItemDefinitions() ?? [BarItemDefinition(obj: CustomButtonTouchBarItem(title: "bad preset"))]
         createAndUpdatePreset(newItems: items)
     }

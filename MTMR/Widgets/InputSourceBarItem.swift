@@ -11,7 +11,7 @@ import Cocoa
 class InputSourceBarItem: CustomButtonTouchBarItem {
     fileprivate var notificationCenter: CFNotificationCenter
     let buttonSize = NSSize(width: 21, height: 21)
-    
+
     override class var typeIdentifier: String {
         return "inputsource"
     }
@@ -19,31 +19,30 @@ class InputSourceBarItem: CustomButtonTouchBarItem {
     init(identifier: NSTouchBarItem.Identifier) {
         notificationCenter = CFNotificationCenterGetDistributedCenter()
         super.init(identifier: identifier, title: "⏳")
-        
+
         self.setup()
     }
 
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     required init(from decoder: Decoder) throws {
         notificationCenter = CFNotificationCenterGetDistributedCenter()
         try super.init(from: decoder)
-        
+
         self.setup()
     }
 
     func setup() {
         observeIputSourceChangedNotification()
         textInputSourceDidChange()
-        self.setTapAction(
-            EventAction({ [weak self] (_ caller: CustomButtonTouchBarItem) in
-                self?.switchInputSource()
-            }
-        ))
+
+        actions.append(ItemAction(.singleTap) { [weak self] in
+            self?.switchInputSource()
+        })
     }
-    
+
     deinit {
         CFNotificationCenterRemoveEveryObserver(notificationCenter, UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque()))
     }
@@ -54,7 +53,7 @@ class InputSourceBarItem: CustomButtonTouchBarItem {
         var iconImage: NSImage?
 
         if let imageURL = currentSource.iconImageURL,
-            let image = NSImage(contentsOf: imageURL) {
+           let image = NSImage(contentsOf: imageURL) {
             iconImage = image
         } else if let iconRef = currentSource.iconRef {
             iconImage = NSImage(iconRef: iconRef)
@@ -95,11 +94,11 @@ class InputSourceBarItem: CustomButtonTouchBarItem {
         }
 
         CFNotificationCenterAddObserver(notificationCenter,
-                                        UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque()),
-                                        callback,
-                                        kTISNotifySelectedKeyboardInputSourceChanged,
-                                        nil,
-                                        .deliverImmediately)
+                UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque()),
+                callback,
+                kTISNotifySelectedKeyboardInputSourceChanged,
+                nil,
+                .deliverImmediately)
     }
 }
 

@@ -7,7 +7,7 @@
 //
 
 import Cocoa
-import Sparkle
+//import Sparkle
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -18,14 +18,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_: Notification) {
         // Configure Sparkle
-        SUUpdater.shared().automaticallyDownloadsUpdates = false
-        SUUpdater.shared().automaticallyChecksForUpdates = true
-        SUUpdater.shared().checkForUpdatesInBackground()
+//        SUUpdater.shared().automaticallyDownloadsUpdates = false
+//        SUUpdater.shared().automaticallyChecksForUpdates = true
+//        SUUpdater.shared().checkForUpdatesInBackground()
 
         AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: true] as NSDictionary)
 
         TouchBarController.shared.setupControlStripPresence()
-        HapticFeedbackUpdate()
 
         if let button = statusItem.button {
             button.image = #imageLiteral(resourceName: "StatusImage")
@@ -40,10 +39,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func applicationWillTerminate(_: Notification) {}
-
-    func HapticFeedbackUpdate() {
-        HapticFeedback.shared = AppSettings.hapticFeedbackState ? HapticFeedback() : nil
-    }
 
     @objc func updateIsBlockedApp() {
         if let frontmostAppId = TouchBarController.shared.frontmostApplicationIdentifier {
@@ -76,7 +71,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             } else {
                 TouchBarController.shared.blacklistAppIdentifiers.append(appIdentifier)
             }
-
+            
             AppSettings.blacklistedAppIds = TouchBarController.shared.blacklistAppIdentifiers
             TouchBarController.shared.updateActiveApp()
             updateIsBlockedApp()
@@ -86,7 +81,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @objc func toggleHapticFeedback(_ item: NSMenuItem) {
         item.state = item.state == .on ? .off : .on
         AppSettings.hapticFeedbackState = item.state == .on
-        HapticFeedbackUpdate()
     }
 
     @objc func toggleMultitouch(_ item: NSMenuItem) {
@@ -132,7 +126,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let hapticFeedback = NSMenuItem(title: "Haptic Feedback", action: #selector(toggleHapticFeedback(_:)), keyEquivalent: "H")
         hapticFeedback.state = AppSettings.hapticFeedbackState ? .on : .off
 
-        let multitouchGestures = NSMenuItem(title: "Default Swipe Gestures", action: #selector(toggleMultitouch(_:)), keyEquivalent: "")
+        let multitouchGestures = NSMenuItem(title: "Volume/Brightness gestures", action: #selector(toggleMultitouch(_:)), keyEquivalent: "")
         multitouchGestures.state = AppSettings.multitouchGestures ? .on : .off
 
         let settingSeparator = NSMenuItem(title: "Settings", action: nil, keyEquivalent: "")
@@ -140,7 +134,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         menu.addItem(withTitle: "Preferences", action: #selector(openPreferences(_:)), keyEquivalent: ",")
         menu.addItem(withTitle: "Open preset", action: #selector(openPreset(_:)), keyEquivalent: "O")
-        menu.addItem(withTitle: "Check for Updates...", action: #selector(SUUpdater.checkForUpdates(_:)), keyEquivalent: "").target = SUUpdater.shared()
+//        menu.addItem(withTitle: "Check for Updates...", action: #selector(SUUpdater.checkForUpdates(_:)), keyEquivalent: "").target = SUUpdater.shared()
 
         menu.addItem(NSMenuItem.separator())
         menu.addItem(settingSeparator)

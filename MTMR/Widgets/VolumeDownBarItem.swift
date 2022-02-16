@@ -17,7 +17,7 @@ class VolumeDownBarItem: CustomButtonTouchBarItem {
         try super.init(from: decoder)
         
         self.setImage(NSImage(named: NSImage.touchBarVolumeDownTemplateName)!)
-        self.setTapAction(EventAction().setHidKeyClosure(keycode: NX_KEYTYPE_SOUND_DOWN))
+        self.addAction(ItemAction(.singleTap).setHidKeyClosure(keycode: NX_KEYTYPE_SOUND_DOWN))
     }
 
     required init?(coder _: NSCoder) {

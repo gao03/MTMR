@@ -12,7 +12,7 @@ class PomodoroBarItem: CustomButtonTouchBarItem {
     override class var typeIdentifier: String {
         return "pomodoro"
     }
-    
+
     private enum CodingKeys: String, CodingKey {
         case workTime
         case restTime
@@ -34,43 +34,41 @@ class PomodoroBarItem: CustomButtonTouchBarItem {
     private var timeLeftString: String {
         return String(format: "%.2i:%.2i", timeLeft / 60, timeLeft % 60)
     }
-    
+
 
     init(identifier: NSTouchBarItem.Identifier, workTime: TimeInterval, restTime: TimeInterval) {
         self.workTime = workTime
         self.restTime = restTime
         super.init(identifier: identifier, title: defaultTitle)
-        
-        self.setup()
+        actions.append(contentsOf: [
+            ItemAction(.singleTap) { [weak self] in self?.startStopWork() },
+            ItemAction(.longTap) { [weak self] in self?.startStopRest() }
+        ])
     }
 
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+
         self.workTime = try container.decodeIfPresent(Double.self, forKey: .workTime) ?? 1500.0
         self.restTime = try container.decodeIfPresent(Double.self, forKey: .restTime) ?? 600.0
-        
+
         try super.init(from: decoder)
         self.title = defaultTitle
-        
+
         self.setup()
     }
-    
+
     func setup() {
-        self.setTapAction(
-            EventAction({ [weak self] (_ caller: CustomButtonTouchBarItem) in
+        self.addAction(ItemAction(.singleTap){ [weak self] () in
                 self?.startStopWork()
-            } )
-        )
-        self.setLongTapAction(
-            EventAction({ [weak self] (_ caller: CustomButtonTouchBarItem) in
-                self?.startStopRest()
-            } )
-        )
+            })
+        self.addAction(ItemAction(.longTap){ [weak self] () in
+            self?.startStopRest()
+        })
     }
 
     deinit {

@@ -18,7 +18,7 @@ class DeleteBarItem: CustomButtonTouchBarItem {
         
         print("DeleteBarItem.init")
         self.title = "del"
-        self.setTapAction(EventAction().setKeyPressClosure(keycode: 117))
+        self.addAction(ItemAction(.singleTap).setKeyPressClosure(keycode: 117))
     }
 
     required init?(coder _: NSCoder) {

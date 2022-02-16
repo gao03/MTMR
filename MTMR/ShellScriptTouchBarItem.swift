@@ -12,15 +12,20 @@ class ShellScriptTouchBarItem: CustomButtonTouchBarItem {
     private let source: String
     private var forceHideConstraint: NSLayoutConstraint!
     
+    struct ScriptResult: Decodable {
+        var title: String?
+        var image: Source?
+    }
+
     private enum CodingKeys: String, CodingKey {
         case source
         case refreshInterval
     }
-    
+
     override class var typeIdentifier: String {
         return "shellScriptTitledButton"
     }
-    
+
     init?(identifier: NSTouchBarItem.Identifier, source: SourceProtocol, interval: TimeInterval) {
         self.interval = interval
         self.source = source.string ?? "echo No \"source\""
@@ -28,23 +33,23 @@ class ShellScriptTouchBarItem: CustomButtonTouchBarItem {
         
         initScripts()
     }
-    
+
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let source = try container.decode(Source.self, forKey: .source)
         self.source = source.string ?? "echo No \"source\""
         self.interval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 1800.0
-        
+
         try super.init(from: decoder)
         self.title = "⏳"
-        
+
         initScripts()
     }
-    
+
     func initScripts() {
         forceHideConstraint = view.widthAnchor.constraint(equalToConstant: 0)
         
@@ -52,16 +57,29 @@ class ShellScriptTouchBarItem: CustomButtonTouchBarItem {
             self.refreshAndSchedule()
         }
     }
-    
+
     func refreshAndSchedule() {
         // Execute script and get result
         let scriptResult = execute(source)
-        
+        var rawTitle: String, image: NSImage?
+        var json: Bool
+
+        do {
+            let decoder = JSONDecoder()
+            let result = try decoder.decode(ScriptResult.self, from: scriptResult.data(using: .utf8)!)
+            json = true
+            rawTitle = result.title ?? ""
+            image = result.image?.image
+        } catch {
+            json = false
+            rawTitle = scriptResult
+        }
+
         // Apply returned text attributes (if they were returned) to our result string
         let helper = AMR_ANSIEscapeHelper.init()
         helper.defaultStringColor = NSColor.white
         helper.font = "1".defaultTouchbarAttributedString.attribute(.font, at: 0, effectiveRange: nil) as? NSFont
-        let title = NSMutableAttributedString.init(attributedString: helper.attributedString(withANSIEscapedString: scriptResult) ?? NSAttributedString(string: ""))
+        let title = NSMutableAttributedString.init(attributedString: helper.attributedString(withANSIEscapedString: rawTitle) ?? NSAttributedString(string: ""))
         title.addAttributes([.baselineOffset: 1], range: NSRange(location: 0, length: title.length))
         let newBackgoundColor: NSColor? = title.length != 0 ? title.attribute(.backgroundColor, at: 0, effectiveRange: nil) as? NSColor : nil
         
@@ -71,6 +89,9 @@ class ShellScriptTouchBarItem: CustomButtonTouchBarItem {
                 self?.backgroundColor = newBackgoundColor
             }
             self?.setAttributedTitle(title)
+//            if json {
+//                self?.image = image
+//            }
             self?.forceHideConstraint.isActive = scriptResult == ""
         }
         
@@ -87,11 +108,19 @@ class ShellScriptTouchBarItem: CustomButtonTouchBarItem {
         
         let pipe = Pipe()
         task.standardOutput = pipe
+
+        // kill process if it is over update interval
+        DispatchQueue.main.asyncAfter(deadline: .now() + interval) { [weak task] in
+            task?.terminate()
+        }
+
         task.launch()
         
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         var output: String = NSString(data: data, encoding: String.Encoding.utf8.rawValue) as String? ?? ""
         
+        //always wait until task end or you can catch "task still running" error while accessing task.terminationStatus variable
+        task.waitUntilExit()
         if (output == "" && task.terminationStatus != 0) {
             output = "error"
         }

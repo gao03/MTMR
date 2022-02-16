@@ -13,20 +13,48 @@ class YandexWeatherBarItem: CustomButtonTouchBarItem, CLLocationManagerDelegate 
     private let activity: NSBackgroundActivityScheduler
     private let unitsStr = "°C"
     private let iconsSource = [
-        "Ясно": "☀️", "Малооблачно": "🌤", "Облачно с прояснениями": "⛅️", "Пасмурно": "☁️", "Небольшой дождь": "🌦", "Дождь": "🌧", "Ливень": "⛈", "Гроза": "🌩", "Дождь со снегом": "☔️", "Небольшой снег": "❄️", "Снег": "🌨", "Туман": "🌫",
-        "Clear": "☀️", "Mostly clear": "🌤", "Partly cloudy": "⛅️", "Overcast": "☁️", "Light rain": "🌦", "Rain": "🌧", "Heavy rain": "⛈", "Storm": "🌩", "Sleet": "☔️", "Light snow": "❄️", "Snow": "🌨", "Fog": "🌫"
+        "Ясно": "☀️",
+        "Малооблачно": "🌤",
+        "Облачно с прояснениями": "⛅️",
+        "Пасмурно": "☁️",
+        "Небольшой дождь": "🌦",
+        "Морось": "💦",
+        "Дождь": "🌧",
+        "Ливень": "⛈",
+        "Гроза": "🌩",
+        "Дождь с грозой": "⛈",
+        "Дождь со снегом": "☔️",
+        "Небольшой снег": "❄️",
+        "Снег": "🌨",
+        "Туман": "🌫",
+
+        "Clear": "☀️",
+        "Mostly clear": "🌤",
+        "Partly cloudy": "⛅️",
+        "Overcast": "☁️",
+        "Light rain": "🌦",
+        "Drizzle": "💦",
+        "Rain": "🌧",
+        "Heavy rain": "⛈",
+        "Storm": "🌩",
+        "Thunderstorm with rain": "⛈",
+        "Sleet": "☔️",
+        "Light snow": "❄️",
+        "Snow": "🌨",
+        "Fog": "🌫"
     ]
     private var location: CLLocation!
     private var prevLocation: CLLocation!
     private var manager: CLLocationManager!
-    
+
     override class var typeIdentifier: String {
         return "weather"
     }
-    
+
     private enum CodingKeys: String, CodingKey {
         case refreshInterval
     }
+    private var updateWeatherTask: URLSessionDataTask?
 
     init(identifier: NSTouchBarItem.Identifier, interval: TimeInterval) {
         activity = NSBackgroundActivityScheduler(identifier: "\(identifier.rawValue).updatecheck")
@@ -39,17 +67,17 @@ class YandexWeatherBarItem: CustomButtonTouchBarItem, CLLocationManagerDelegate 
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-               
+
         self.activity = NSBackgroundActivityScheduler(identifier: CustomTouchBarItem.createIdentifier("YandexWeather.updatecheck").rawValue)
         self.activity.interval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 1800.0
-        
+
         try super.init(from: decoder)
         self.setup()
     }
-    
+
     func setup() {
         let status = CLLocationManager.authorizationStatus()
         if status == .restricted || status == .denied {
@@ -75,19 +103,17 @@ class YandexWeatherBarItem: CustomButtonTouchBarItem, CLLocationManagerDelegate 
         manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         manager.startUpdatingLocation()
 
-        
-        self.setTapAction(
-            EventAction({ [weak self] (_ caller: CustomButtonTouchBarItem) in
-                self?.defaultTapAction()
-            } )
-        )
+        if actions.filter({ $0.trigger == .singleTap }).isEmpty {
+            actions.append(ItemAction(.singleTap, defaultTapAction))
+        }
     }
 
     @objc func updateWeather() {
         var urlRequest = URLRequest(url: URL(string: getWeatherUrl())!)
         urlRequest.addValue("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36", forHTTPHeaderField: "user-agent") // important for the right format
 
-        let task = URLSession.shared.dataTask(with: urlRequest) { data, _, error in
+        updateWeatherTask?.cancel()
+        updateWeatherTask = URLSession.shared.dataTask(with: urlRequest) { data, _, error in
             guard error == nil, let response = data?.utf8string else {
                 return
             }
@@ -112,12 +138,12 @@ class YandexWeatherBarItem: CustomButtonTouchBarItem, CLLocationManagerDelegate 
             }
         }
 
-        task.resume()
+        updateWeatherTask?.resume()
     }
 
     func getWeatherUrl() -> String {
         if location != nil {
-            return "https://yandex.ru/pogoda/?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)?lang=ru"
+            return "https://yandex.ru/pogoda/?lat=\(location.coordinate.latitude)&lon=\(location.coordinate.longitude)&lang=ru"
         } else {
             return "https://yandex.ru/pogoda/?lang=ru" // Yandex will try to determine your location by default
         }

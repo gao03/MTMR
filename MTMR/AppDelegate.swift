@@ -7,7 +7,6 @@
 //
 
 import Cocoa
-//import Sparkle
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -17,10 +16,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private var fileSystemSource: DispatchSourceFileSystemObject?
 
     func applicationDidFinishLaunching(_: Notification) {
-        // Configure Sparkle
-//        SUUpdater.shared().automaticallyDownloadsUpdates = false
-//        SUUpdater.shared().automaticallyChecksForUpdates = true
-//        SUUpdater.shared().checkForUpdatesInBackground()
 
         AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt.takeRetainedValue() as NSString: true] as NSDictionary)
 
@@ -134,7 +129,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         menu.addItem(withTitle: "Preferences", action: #selector(openPreferences(_:)), keyEquivalent: ",")
         menu.addItem(withTitle: "Open preset", action: #selector(openPreset(_:)), keyEquivalent: "O")
-//        menu.addItem(withTitle: "Check for Updates...", action: #selector(SUUpdater.checkForUpdates(_:)), keyEquivalent: "").target = SUUpdater.shared()
 
         menu.addItem(NSMenuItem.separator())
         menu.addItem(settingSeparator)

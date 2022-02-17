@@ -21,26 +21,6 @@ class CPUBarItem: CustomButtonTouchBarItem {
         case refreshInterval
     }
 
-    init(identifier: NSTouchBarItem.Identifier, refreshInterval: TimeInterval) {
-        self.refreshInterval = refreshInterval
-        super.init(identifier: identifier, title: "⏳")
-                
-        // Set default image
-//        if self.image == nil {
-//            self.image = #imageLiteral(resourceName: "cpu").resize(maxSize: NSSize(width: 24, height: 24));
-//        }
-        
-        // Set default action
-        if actions.filter({ $0.trigger == .singleTap }).isEmpty {
-            actions.append(ItemAction(
-                .singleTap,
-                defaultTapAction
-            ))
-        }
-        
-        refreshAndSchedule()
-    }
-
     required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -48,6 +28,13 @@ class CPUBarItem: CustomButtonTouchBarItem {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.refreshInterval = try container.decodeIfPresent(Double.self, forKey: .refreshInterval) ?? 1800.0
         try super.init(from: decoder)
+
+        // Set default image
+        if self.getImage() == nil {
+            self.setImage(#imageLiteral(resourceName: "cpu").resize(maxSize: NSSize(width: 24, height: 24)));
+        }
+
+        refreshAndSchedule()
     }
 
     func refreshAndSchedule() {
@@ -62,8 +49,8 @@ class CPUBarItem: CustomButtonTouchBarItem {
             var color: NSColor? = nil
             var bgColor: NSColor? = nil
             if usage > 70 {
-                color = .black
-                bgColor = .yellow
+                color = .red
+//                bgColor = .yellow
             } else if usage > 30 {
                 color = .yellow
             }
@@ -82,14 +69,9 @@ class CPUBarItem: CustomButtonTouchBarItem {
         }
     }
 
-    func defaultTapAction() {
-        refreshQueue?.async { [weak self] in
-            self?.defaultSingleTapScript.executeAndReturnError(nil)
-        }
-    }
-    
+
     deinit {
-        refreshQueue?.suspend()
-        refreshQueue = nil
+//        refreshQueue?.suspend()
+//        refreshQueue = nil
     }
 }

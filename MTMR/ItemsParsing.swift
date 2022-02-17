@@ -3,7 +3,7 @@ import Foundation
 
 extension Data {
     func barItemDefinitions() -> [BarItemDefinition]? {
-        return try! JSONDecoder().decode([BarItemDefinition].self, from: utf8string!.stripComments().data(using: .utf8)!)
+        return try? JSONDecoder().decode([BarItemDefinition].self, from: utf8string!.stripComments().data(using: .utf8)!)
     }
 }
 
@@ -42,6 +42,7 @@ struct BarItemDefinition: Decodable {
         SleepBarItem.self,
         DisplaySleepBarItem.self,
         CPUBarItem.self,
+        StockBarItem.self,
 
 
         // custom widgets
@@ -189,7 +190,9 @@ extension Data {
 
 extension URL {
     var appleScript: NSAppleScript? {
-        guard FileManager.default.fileExists(atPath: path) else { return nil }
+        guard FileManager.default.fileExists(atPath: path) else {
+            return nil
+        }
         return NSAppleScript(contentsOf: self, error: nil)
     }
 }

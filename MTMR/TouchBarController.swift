@@ -72,7 +72,7 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
 
         touchBar.delegate = self
         touchBar.defaultItemIdentifiers = [basicViewIdentifier]
-        
+
         basicView = BasicView(identifier: basicViewIdentifier, items: leftItems + [scrollArea] + rightItems, swipeItems: swipeItems)
         basicView?.legacyGesturesEnabled = AppSettings.multitouchGestures
 
@@ -86,6 +86,8 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
         }
 
         updateActiveApp()
+
+        StockHelper.register(items: items)
     }
 
     @objc func activeApplicationChanged(_: Notification) {
@@ -103,7 +105,7 @@ class TouchBarController: NSObject, NSTouchBarDelegate {
     func reloadStandardConfig() {
         let presetPath = standardConfigPath
         if !FileManager.default.fileExists(atPath: presetPath),
-            let defaultPreset = Bundle.main.path(forResource: "defaultPreset", ofType: "json") {
+           let defaultPreset = Bundle.main.path(forResource: "defaultPreset", ofType: "json") {
             try? FileManager.default.createDirectory(atPath: appSupportDirectory, withIntermediateDirectories: true, attributes: nil)
             try? FileManager.default.copyItem(atPath: defaultPreset, toPath: presetPath)
         }

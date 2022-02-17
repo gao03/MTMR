@@ -205,13 +205,6 @@ class CustomButtonTouchBarItem: CustomTouchBarItem {
         self.init(identifier: CustomTouchBarItem.createIdentifier(CustomButtonTouchBarItem.typeIdentifier), title: title)
     }
 
-//    func setTapAction(_ action: ItemAction?) {
-//        if action != nil {
-//            action?.trigger = Action.Trigger.singleTap
-//            actions.append(action!)
-//        }
-//    }
-
     func addAction(_ action: ItemAction?) {
         if action != nil {
             actions.append(action!)
@@ -219,14 +212,6 @@ class CustomButtonTouchBarItem: CustomTouchBarItem {
                 self.longClick?.isEnabled = true
             }
         }
-    }
-
-    func setLongTapAction(_ action: ItemAction?) {
-        if action != nil {
-            action?.trigger = Action.Trigger.longTap
-            actions.append(action!)
-        }
-        self.longClick?.isEnabled = action != nil
     }
 
     required init?(coder _: NSCoder) {

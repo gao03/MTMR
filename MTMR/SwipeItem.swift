@@ -75,7 +75,7 @@ class SwipeItem: CustomTouchBarItem {
             }
         }
         if scriptBash != nil {
-            DispatchQueue.shellScriptQueue.async {
+            DispatchQueueHelper.async {
                 let task = Process()
                 task.launchPath = "/bin/bash"
                 task.arguments = ["-c", self.scriptBash!]
